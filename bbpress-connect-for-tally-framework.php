@@ -32,7 +32,7 @@ class bbpresstallyc{
 		add_action('init', array($this,'load_textdomain'));
 		add_action('after_setup_theme', array($this,'after_setup_theme'));
 		
-		$this->custome_css = apply_filters('bbpresstallyc_custom_css', true);
+		$this->custome_css = apply_filters('bbpresstallyc_custom_css', false);
 	}
 	
 	
