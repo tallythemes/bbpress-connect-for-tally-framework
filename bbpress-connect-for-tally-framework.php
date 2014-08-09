@@ -26,13 +26,10 @@ define('BBPRESSTALLYC_VERSION', 0.1);
 
 
 class bbpresstallyc{
-	public $custome_css;
 	
 	function __construct(){
 		add_action('init', array($this,'load_textdomain'));
 		add_action('after_setup_theme', array($this,'after_setup_theme'));
-		
-		$this->custome_css = apply_filters('bbpresstallyc_custom_css', false);
 	}
 	
 	
@@ -83,6 +80,8 @@ class bbpresstallyc{
 		add_filter ('bbp_no_breadcrumb', '__return_true');
 		
 		add_action('wp_enqueue_scripts', array($this,'custom_scripts'));
+		
+		add_filter('tally_page_title', array($this,'archive_page_title'));
 	}
 	
 	
@@ -163,12 +162,31 @@ class bbpresstallyc{
 	 * @used with "bbp_enqueue_scripts" hook
 	 */
 	function custom_scripts(){
-		if(is_bbpress()){
-			if($this->custome_css == true){
+		if(class_exists('bbPress')){
+			if(apply_filters('bbpresstallyc_custom_css', false) == true){
 				wp_deregister_style( 'bbp-default' );
 				wp_enqueue_style( 'bbp-default', BBPRESSTALLYC_URL.'assets/css/bbpress.css' );
 			}
 		}
+	}
+	
+	
+	/** Add Archive page title ***********************************************/
+	/**
+	 * This function add title in the forum index page
+	 *
+	 * @since 0.1
+	 *
+	 * @used with "tally_page_title" filter
+	 */
+	function archive_page_title($title){
+		if(class_exists('bbPress') && is_bbpress() && is_post_type_archive('forum')){
+			ob_start();
+				bbp_forum_archive_title();
+			$title = ob_get_contents();
+			ob_end_clean();
+		}
+		return $title;
 	}
 	
 	
