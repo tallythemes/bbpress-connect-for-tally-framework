@@ -81,7 +81,7 @@ class bbpresstallyc{
 		
 		add_action('wp_enqueue_scripts', array($this,'custom_scripts'));
 		
-		add_filter('tally_page_title', array($this,'archive_page_title'));
+		//add_filter('tally_page_title', array($this,'archive_page_title'));
 	}
 	
 	
@@ -193,4 +193,4 @@ class bbpresstallyc{
 }// END of the class
 
 
-new bbpresstallyc;
+$bbpresstallyc = new bbpresstallyc;
