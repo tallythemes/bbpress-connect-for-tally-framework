@@ -5,7 +5,7 @@
  * Description: Add basic bbPress templating and Style for  <strong> Tally Framework</strong>
  * Author:      TallyThemes
  * Author URI:  http://tallythemes.com/
- * Version:     0.2
+ * Version:     0.3
  * Text Domain: bbpresstallyc_textdomain
  * Domain Path: /languages/
  * Name Space: bbpresstallyc
@@ -22,7 +22,7 @@ define('BBPRESSTALLYC', 'bbPress Connect For Tally Framework' );
 define('BBPRESSTALLYC_URL', site_url(str_replace( $path_abs, '', $path_dir )) );
 define('BBPRESSTALLYC_DRI', $path_dir );
 define('BBPRESSTALLYC_TEMPLATE', BBPRESSTALLYC_DRI.'bbpress' );
-define('BBPRESSTALLYC_VERSION', 0.2);
+define('BBPRESSTALLYC_VERSION', 0.3);
 
 
 class bbpresstallyc{
