@@ -22,6 +22,9 @@ Please see [http://tallythemes.com/how-to-install-wordpress-plugin/](http://tall
 
 == Changelog ==
 
+= 0.4 =
+* Fix a Bug with updated theme
+
 = 0.3 =
 * Fix forum archive page title issue
 

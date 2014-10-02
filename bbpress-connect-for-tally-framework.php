@@ -5,7 +5,7 @@
  * Description: Add basic bbPress templating and Style for  <strong> Tally Framework</strong>
  * Author:      TallyThemes
  * Author URI:  http://tallythemes.com/
- * Version:     0.3
+ * Version:     0.4
  * Text Domain: bbpresstallyc_textdomain
  * Domain Path: /languages/
  * Name Space: bbpresstallyc
@@ -22,7 +22,7 @@ define('BBPRESSTALLYC', 'bbPress Connect For Tally Framework' );
 define('BBPRESSTALLYC_URL', site_url(str_replace( $path_abs, '', $path_dir )) );
 define('BBPRESSTALLYC_DRI', $path_dir );
 define('BBPRESSTALLYC_TEMPLATE', BBPRESSTALLYC_DRI.'bbpress' );
-define('BBPRESSTALLYC_VERSION', 0.3);
+define('BBPRESSTALLYC_VERSION', 0.4);
 
 
 class bbpresstallyc{
@@ -75,7 +75,7 @@ class bbpresstallyc{
 		add_action( 'tally_sidebar', array($this,'add_sidebar') );
 		add_filter('tally_sidebar_active', array($this,'disable_theme_sidebar'));
 		
-		add_action('tally_reset_loops', array($this,'add_page_content'));
+		add_action('tally_template_init', array($this,'add_page_content'));
 		
 		add_filter ('bbp_no_breadcrumb', '__return_true');
 		
@@ -97,7 +97,7 @@ class bbpresstallyc{
 	function add_sidebar(){
 		if(is_bbpress()){
 			if ( ! dynamic_sidebar( 'tally_bbpress' ) && current_user_can( 'edit_theme_options' )  ) {
-				if(function_exists('tally_default_widget_area_content')){ tally_default_widget_area_content( __( 'bbPress Sidebar Widget Area', 'tally_textdomain' ) ); };
+				if(function_exists('tally_default_widget_area_content')){ tally_default_widget_area_content( __( 'bbPress Sidebar Widget Area', 'bbpresstallyc_textdomain' ) ); };
 			}	
 		}
 	}
@@ -129,26 +129,26 @@ class bbpresstallyc{
 	 *
 	 * @used with "tally_reset_loops" hook
 	 */
-	function add_page_content($active){
+	function add_page_content(){
 		if(is_bbpress()){
-			tally_defaults_reset_loops();
-		
-			remove_action( 'tally_entry_header', 'tally_do_post_media', 4 );
-			remove_action( 'tally_entry_header', 'tally_entry_header_markup_open', 5 );
-			remove_action( 'tally_entry_header', 'tally_entry_header_markup_close', 15 );
-			remove_action( 'tally_entry_header', 'tally_do_post_title' );
-			remove_action( 'tally_entry_header', 'tally_do_post_info', 12 );
-			remove_action( 'tally_entry_header', 'tally_do_post_format_link', 13 );
-			remove_action( 'tally_entry_content', 'tally_do_post_format_quote', 10 );
-			remove_action( 'tally_entry_content', 'tally_do_post_content_nav', 12 );
-			remove_action( 'tally_entry_footer', 'tally_entry_footer_markup_open', 5 );
-			remove_action( 'tally_entry_footer', 'tally_entry_footer_markup_close', 15 );
-			remove_action( 'tally_entry_footer', 'tally_do_post_meta' );
-			remove_action( 'tally_after_entry', 'tally_do_author_box_single', 8 );
-			remove_action( 'tally_after_endwhile', 'tally_do_posts_nav' );
+			remove_all_actions('tally_loop');
+			add_action('tally_loop', array($this, 'page_content'));
+			
 		}
-		
-		return $active;
+	}
+	
+	function page_content(){
+		if ( have_posts() ) : 
+			while ( have_posts() ) : the_post();
+				echo '<article '; post_class(); echo '>';
+					echo '<div class="entry-content">';
+						the_content();
+					echo '</div>';
+				echo '</article>';
+			endwhile;
+		else :
+			_e('Sorry No Post fund', 'bbpresstallyc_textdomain');
+		endif;
 	}
 	
 	
